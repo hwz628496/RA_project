@@ -104,7 +104,7 @@ finalCohort7 = finalCohort7.sort_index()
 finalCohort8 = finalCohort8.sort_index()
 finalCohortLucas = finalCohortLucas.sort_index()
 
-with pd.ExcelWriter('set3_single285_09272020_merged.xlsx') as writer:
+with pd.ExcelWriter('set3_single285_11132020_merged.xlsx') as writer:
     finalCohort1['MRN'].to_excel(writer, sheet_name='Cohort 1')
     finalCohort2['MRN'].to_excel(writer, sheet_name='Cohort 2')
     finalCohort3['MRN'].to_excel(writer, sheet_name='Cohort 3')
@@ -114,7 +114,7 @@ with pd.ExcelWriter('set3_single285_09272020_merged.xlsx') as writer:
     finalCohort7['MRN'].to_excel(writer, sheet_name='Cohort 7')
     finalCohort8['MRN'].to_excel(writer, sheet_name='Cohort 8')
 
-with pd.ExcelWriter('set3_single285_lucas_09272020_merged.xlsx') as writer:
+with pd.ExcelWriter('set3_single285_lucas_11132020_merged.xlsx') as writer:
     finalCohortLucas['MRN'].to_excel(writer, sheet_name="Lucas' set")
 
 indPos2 = pd.DataFrame(indPos)

@@ -6,21 +6,20 @@ Created on Fri Sep 25 19:35:14 2020
 """
 import pandas as pd
 from math import log, exp
-from raICD import icd9, icd10
+from raICD import exact, startsw
 from random import choices
 from random import shuffle
 
-
 def containsICD(icdList):
     icdCount = 0
-    for code in icd9:
+    for code in exact:
         if code in icdList:
-            icdCount += 1
+            icdCount += sum([code == s for s in icdList])
         else:
             continue
-    for c in icd10:
+    for c in startsw:
         if any(s.startswith(c) for s in icdList):
-            icdCount += 1
+            icdCount += sum([s.startswith(c) for s in icdList])
         else:
             continue
     return icdCount
@@ -162,3 +161,18 @@ def produceCohort(ptct, drawingDf, patients):
         row=patients.loc[patients['MRN']==mrn]
         cohortDf = cohortDf.append(row)
     return cohortDf, drawingDf
+
+
+def loadClinData():
+    casesDemographics = pd.read_csv('C:\\Users\\hwz62\\Documents\\HIPAA Backup\\Rheumatoid Arthritis\\demographics2.csv')
+    casesDiagnoses = pd.read_csv('C:\\Users\\hwz62\\Documents\\HIPAA Backup\\Rheumatoid Arthritis\\code\\Ranganath_DX_090820.txt', sep='","', header=0)
+    controlDemographics = pd.read_csv('C:\\Users\\hwz62\\Documents\\HIPAA Backup\\Rheumatoid Arthritis\\controls\\Rang_Bui_Controls_Main.csv')
+    controlDiagnoses = pd.read_csv('C:\\Users\\hwz62\\Documents\\HIPAA Backup\\Rheumatoid Arthritis\\controls\\Rang_Bui_Controls_DX.txt', sep='|', header=0)
+    casesDemographics = casesDemographics[casesDemographics['RA_ENC_CNT'].notna()]
+    undesiredColumns = ['CONDITION', 'SEX_1', 'RACE_1', 'ETHNICITY_1']
+    controlDemographics2 = controlDemographics.drop(undesiredColumns, axis=1)
+    demographics = pd.concat([casesDemographics, controlDemographics2])
+    demo2 = demographics.set_index('MRN')
+    diagnoses = pd.concat([casesDiagnoses, controlDiagnoses])
+    diag2 = diagnoses.set_index('MRN')
+    return demographics, demo2, diagnoses, diag2
